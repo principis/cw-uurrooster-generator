@@ -1,0 +1,25 @@
+{
+    "name": "principis/cw_uurrooster",
+    "type": "project",
+    "require": {
+        "kigkonsult/icalcreator": "^2.39",
+        "sabre/vobject": "^4.0",
+        "ext-curl": "*",
+        "ext-pdo": "*",
+        "ext-dom": "*",
+        "ext-libxml": "*",
+        "ext-ctype": "*"
+    },
+    "license": "AGPL",
+    "autoload": {
+        "psr-4": {
+            "Principis\\CwUurrooster\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Arthur Bols",
+            "email": "arthur@bols.dev"
+        }
+    ]
+}
