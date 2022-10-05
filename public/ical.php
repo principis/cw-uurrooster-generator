@@ -9,7 +9,7 @@ function create_calendar($courses)
 {
     $vcalendar = new VObject\Component\VCalendar();
     $tz = $vcalendar->createComponent('VTIMEZONE', [
-        'TZID' => 'CET',
+        'TZID' => 'Europe/Brussels',
     ]);
     $standard = $vcalendar->createComponent('STANDARD', [
         'DTSTART' => '16010101T030000',
