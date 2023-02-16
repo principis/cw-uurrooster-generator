@@ -3,6 +3,7 @@
 require __DIR__.'/vendor/autoload.php';
 require __DIR__.'/config/config.php';
 
+use Sabre\VObject;
 
 info("Retrieving courses...");
 $urls = retrieve_courses();
@@ -14,6 +15,8 @@ if (empty($urls)) {
 info("Downloading ics files...");
 download_ics($urls);
 
+parseCourses($urls);
+
 info("Updating database...");
 update_db($urls);
 
@@ -21,15 +24,15 @@ function update_db(array $icsUrls)
 {
     $db = new PDO("sqlite:".__DIR__."/roosters_new.db");
     $db->exec(
-        "CREATE TABLE courses(id VARCHAR PRIMARY KEY, `file` VARCHAR, `course` VARCHAR, `opo` VARCHAR, `group` VARCHAR)"
+        "CREATE TABLE courses(`id` VARCHAR PRIMARY KEY, `file` VARCHAR, `course` VARCHAR, `opo` VARCHAR, `url` VARCHAR, `group` VARCHAR)"
     );
 
     $db->beginTransaction();
 
-    $stmt = $db->prepare("INSERT INTO courses (id, `file`,`course`,`opo`,`group`) VALUES(?,?,?,?,?)");
+    $stmt = $db->prepare("INSERT INTO courses (`id`, `file`,`course`,`opo`,`url`,`group`) VALUES(?,?,?,?,?,?)");
 
     foreach ($icsUrls as $key => $item) {
-        $stmt->execute([substr(md5($key), 0, 8), $key, $item['course'], $item['opo'], $item['group']]);
+        $stmt->execute([substr(md5($key), 0, 8), $key, $item['course'], $item['opo'], $item['url'], $item['group']]);
     }
     $db->commit();
     rename(__DIR__.'/roosters_new.db', __DIR__.'/roosters.db');
@@ -117,6 +120,18 @@ function retrieve_courses() :array
     }
 
     return $icsUrls;
+}
+
+function parseCourses(array &$icsData) {
+    foreach ($icsData as $key => $course) {
+
+        $v = VObject\Reader::read(
+            fopen(__DIR__."/var/cache/$key", 'r'),
+            VObject\Reader::OPTION_FORGIVING
+        );
+
+        $icsData[$key]['url'] = $v->VEVENT[0]->URL;
+    }
 }
 
 function get_base_url(string $url) :string

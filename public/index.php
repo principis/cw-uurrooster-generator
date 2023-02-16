@@ -66,7 +66,7 @@ foreach ($courses as $course) {
       <span>
         {$course['course']}
         <span class=\"d-block text-muted\">
-            <a class='text-decoration-none' target='_blank' href=\"https://onderwijsaanbod.kuleuven.be/syllabi/n/{$course['opo']}N.htm\">
+            <a class='text-decoration-none' target='_blank' href=\"{$course['url']}\">
                 <span class=\"badge bg-secondary\"><i class=\"bi bi-link-45deg\"></i> {$course['opo']}</span>
                 
             </a>
