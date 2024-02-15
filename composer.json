@@ -8,7 +8,9 @@
         "ext-pdo": "*",
         "ext-dom": "*",
         "ext-libxml": "*",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "twbs/bootstrap": "^5.3",
+        "twbs/bootstrap-icons": "*"
     },
     "license": "AGPL",
     "autoload": {
@@ -21,5 +23,19 @@
             "name": "Arthur Bols",
             "email": "arthur@bols.dev"
         }
-    ]
+    ],
+    "scripts": {
+        "auto-scripts": [
+            "rm -rf public/vendor/",
+            "mkdir -p public/vendor/",
+            "ln -sf ../../vendor/twbs/bootstrap/dist public/vendor/bootstrap",
+            "ln -sf ../../vendor/twbs/bootstrap-icons/font public/vendor/bootstrap-icons"
+        ],
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    }
 }
